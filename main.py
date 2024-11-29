@@ -69,7 +69,11 @@ def user_loop():
         print_data(data)
         
         try:
+<<<<<<< HEAD
             index = int(input("Input index out of possible, if api link: will be redirected there, else: exit program: "))
+=======
+            index = int(input("Input index out of possible, if apilink: will be redirected there, else: exit program: "))
+>>>>>>> 7abc031b6e7572f8e02751e255d98c72924dc60e
             
             if 0 <= index < len(data):
                 url = data[index][1]
