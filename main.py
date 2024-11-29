@@ -37,10 +37,8 @@ def get_data(url):
     except ValueError:
         print("Error decoding JSON from response.")
         return None
-
-    list = convert_to_list(data)
         
-    return list
+    return data
     
 # TODO check if such user exists without using API
 # def validate_user(login):
@@ -54,16 +52,15 @@ def validate_url(url):
         return None
     
 def get_username_input():
-    api_url = "https://api.github.com/users/"
     login = input("Input username on github: ")
+    api_url = f"https://api.github.com/users/{login}"
+    return api_url
 
-    return api_url + login
-
-if __name__ == "__main__":
+def user_loop():
     url = get_username_input()
 
     while True:
-        data = get_data(url)
+        data = convert_to_list(get_data(url))
         
         if not data:
             print("Exiting due to no data.")
@@ -72,7 +69,7 @@ if __name__ == "__main__":
         print_data(data)
         
         try:
-            index = int(input("Input index out of possible, if link: will be redirected there, else: exit program: "))
+            index = int(input("Input index out of possible, if api link: will be redirected there, else: exit program: "))
             
             if 0 <= index < len(data):
                 url = data[index][1]
@@ -87,7 +84,46 @@ if __name__ == "__main__":
             print("Invalid input. Exiting.")
             break
 
-    print("Bye!")
+    print("Exit user loop!")
+    
 
+def print_events_data(data):
+    if not data:
+        print("No data available.")
+        return
+    
+    for event in data:
+        event_type = event["type"].replace("Event", "")
+        if event_type.endswith("e"):
+            event_type += "d"
+        else:
+            event_type += "ed"
+        repo_name = event["repo"]["name"]
+        login_name = event["actor"]["display_login"]
+        
+        print(f"User {login_name} {event_type} the repository {repo_name}")
+
+
+def check_events():
+    url = get_username_input()+"/events"
+
+    data = get_data(url)
+        
+    if not data:
+        print("Exiting due to no data.")
+        return
+    
+    print_events_data(data)
+    
+if __name__ == "__main__":
+    choice = input("Enter 'user' if you want to check info about user\nEnter 'events' if you wnt to check info about user's events.")
+    
+    match(choice):
+        case "user":
+            user_loop()
+        case "events":
+            check_events()
+
+    print("Bye!")
 
 
