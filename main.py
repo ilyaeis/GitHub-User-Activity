@@ -72,7 +72,7 @@ if __name__ == "__main__":
         print_data(data)
         
         try:
-            index = int(input("Input index out of possible, if link: will be redirected there, else: exit program: "))
+            index = int(input("Input index out of possible, if apilink: will be redirected there, else: exit program: "))
             
             if 0 <= index < len(data):
                 url = data[index][1]
